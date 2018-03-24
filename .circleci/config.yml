@@ -1,0 +1,17 @@
+defaults: &defaults
+  working_directory: ~/wu-diff-js
+  docker:
+    - image: node:latest
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: Test
+          command: tsc run ltest

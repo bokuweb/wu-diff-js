@@ -1,0 +1,25 @@
+{
+  "name": "wu-diff-js",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/bokuweb/wu-diff-js.git",
+  "author": "bokuweb <bokuweb12@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "test": "tsc --outDir dist && ava dist/*.test.js",
+    "tsc:watch": "tsc --outDir dist -w",
+    "test:watch": "ava dist/*.test.js --watch",
+    "watch": "run-p tsc:watch test:watch",
+    "prepublish": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^9.6.0",
+    "ava": "^0.25.0",
+    "npm-run-all": "^4.1.2",
+    "typescript": "^2.8.0"
+  },
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}
