@@ -23,7 +23,7 @@ diff(Array.from('strength'), Array.from('string'));
     { type: 'removed', value: 'h' },
   ]
 */
-
+```
 
 ## LICENSE
 
