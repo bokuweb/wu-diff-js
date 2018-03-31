@@ -1,7 +1,7 @@
 {
   "name": "wu-diff-js",
   "version": "0.1.1",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/bokuweb/wu-diff-js.git",
   "author": "bokuweb <bokuweb12@gmail.com>",
   "license": "MIT",
