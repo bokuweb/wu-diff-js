@@ -1,4 +1,8 @@
 {
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "compilerOptions": {
     /* Basic Options */
     "target": "es5",
@@ -6,10 +10,6 @@
     "lib": [
       "es2015",
       "dom"
-    ],
-    "exclude": [
-      "node_modules",
-      "dist"
     ],
     // "allowJs": true,                       /* Allow javascript files to be compiled. */
     // "checkJs": true,                       /* Report errors in .js files. */
