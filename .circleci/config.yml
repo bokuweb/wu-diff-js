@@ -14,4 +14,4 @@ jobs:
           command: yarn
       - run:
           name: Test
-          command: tsc run ltest
+          command: npm run test
