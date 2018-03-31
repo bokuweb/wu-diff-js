@@ -7,16 +7,18 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc --outDir dist",
+    "clean": "rimraf ./dist",
     "test": "tsc --outDir dist && ava dist/*.test.js",
     "tsc:watch": "tsc --outDir dist -w",
     "test:watch": "ava dist/*.test.js --watch",
     "watch": "run-p tsc:watch test:watch",
-    "prepublish": "npm run build"
+    "prepublish": "run-s clean build"
   },
   "devDependencies": {
     "@types/node": "^9.6.0",
     "ava": "^0.25.0",
     "npm-run-all": "^4.1.2",
+    "rimraf": "^2.6.2",
     "typescript": "^2.8.0"
   },
   "dependencies": {

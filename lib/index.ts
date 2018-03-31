@@ -1,3 +1,5 @@
+import { create } from 'domain';
+
 const range = (n: number) => Array.from(Array(n).keys());
 
 interface FarthestPoint {
@@ -62,15 +64,36 @@ function snake<T>(k: number, slide: FarthestPoint, down: FarthestPoint, offset: 
   return fp;
 }
 
+function createCommon<T>(A: T[], B: T[], reverse?: boolean) {
+  const common = [];
+  if (A.length === 0 || B.length === 0) return [];
+  for (let i = 0; i < Math.min(A.length, B.length); i += 1) {
+    if (A[reverse ? A.length - i - 1 : i] === B[reverse ? B.length - i - 1 : i]) {
+      common.push(A[reverse ? A.length - i - 1 : i]);
+    } else {
+      return common;
+    }
+  }
+  return common;
+}
+
 export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
-  let M = A.length;
-  let N = B.length;
-  const swapped = N > M;
+  const prefixCommon = createCommon(A, B);
+  const suffixCommon = createCommon(A.slice(prefixCommon.length), B.slice(prefixCommon.length), true);
+  A = suffixCommon.length ? A.slice(prefixCommon.length, -suffixCommon.length) : A.slice(prefixCommon.length);
+  B = suffixCommon.length ? B.slice(prefixCommon.length, -suffixCommon.length) : B.slice(prefixCommon.length);
+  const swapped = B.length > A.length;
   [A, B] = swapped ? [B, A] : [A, B];
-  M = A.length;
-  N = B.length;
-  if (M === 0 && N === 0) return [];
-  if (N === 0) return A.map(a => ({ type: (swapped ? 'added' : 'removed') as DiffType, value: a }));
+  const M = A.length;
+  const N = B.length;
+  if (!M && !N && !suffixCommon.length && !prefixCommon.length) return [];
+  if (!N) {
+    return [
+      ...prefixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
+      ...A.map(a => ({ type: (swapped ? 'added' : 'removed') as DiffType, value: a })),
+      ...suffixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
+    ];
+  }
   const offset = N;
   const delta = M - N;
   const size = M + N + 1;
@@ -86,5 +109,9 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
     }
     fp[delta + offset] = snake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], offset, A, B);
   }
-  return backTrace(A, B, fp[delta + offset], swapped);
+  return [
+    ...prefixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
+    ...backTrace(A, B, fp[delta + offset], swapped),
+    ...suffixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
+  ];
 }
