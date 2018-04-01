@@ -1,5 +1,3 @@
-const range = (n: number) => Array.from(Array(n).keys());
-
 interface FarthestPoint {
   y: number;
   tree?: Tree;
