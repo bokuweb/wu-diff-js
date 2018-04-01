@@ -1,5 +1,3 @@
-import { create } from 'domain';
-
 const range = (n: number) => Array.from(Array(n).keys());
 
 interface FarthestPoint {
