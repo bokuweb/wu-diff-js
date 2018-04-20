@@ -21,6 +21,10 @@ test('"" vs "a"', t => {
   t.deepEqual(diff([], ['a']), [{ type: 'added', value: 'a' }]);
 });
 
+test('"a" vs "a, b"', t => {
+  t.deepEqual(diff(['a'], ['a', 'b']), [{ type: 'common', value: 'a' }, { type: 'added', value: 'b' }]);
+});
+
 test('"strength" vs "string"', t => {
   t.deepEqual(diff(Array.from('strength'), Array.from('string')), [
     { type: 'common', value: 's' },
