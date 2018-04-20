@@ -42,8 +42,8 @@ function backTrace<T>(A: T[], B: T[], current: FarthestPoint, swapped: boolean) 
 }
 
 function createFP(slide: FarthestPoint, down: FarthestPoint, k: number, M: number, N: number): FarthestPoint {
-  if (slide.y === -1 && down.y === -1) return { y: 0 };
-  return down.y === -1 || k === M || slide.y > down.y + 1
+  if (slide && slide.y === -1 && (down && down.y === -1)) return { y: 0 };
+  return (down && down.y === -1) || k === M || (slide && slide.y) > (down && down.y) + 1
     ? { y: slide.y, tree: { type: REMOVED, prev: slide.tree } }
     : { y: down.y + 1, tree: { type: ADDED, prev: down.tree } };
 }
@@ -105,6 +105,7 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
     }
     fp[delta + offset] = snake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], offset, A, B);
   }
+
   return [
     ...prefixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
     ...backTrace(A, B, fp[delta + offset], swapped),
