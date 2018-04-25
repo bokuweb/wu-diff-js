@@ -109,6 +109,9 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
   const delta = M - N;
   const size = M + N + 1;
   const fp = new Array(size).fill({ y: -1 });
+  // INFO: This buffer is used to save memory and improve performance.
+  //       The first half is used to save route and last half is used to save diff type.
+  //       This is because, when I kept new uint8array area to save type, performance worsened.
   const routes = new Uint32Array((M * N + size + 1) * 2);
   const diffTypesPtrOffset = routes.length / 2;
   let ptr = 0;
