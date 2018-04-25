@@ -1,6 +1,6 @@
 {
   "name": "wu-diff-js",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "dist/index.js",
   "repository": "https://github.com/bokuweb/wu-diff-js.git",
   "author": "bokuweb <bokuweb12@gmail.com>",
@@ -24,7 +24,9 @@
     "benchmark": "^2.1.4"
   },
   "typings": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "tslib": "^1.9.0"
   }
