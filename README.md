@@ -25,6 +25,20 @@ diff(Array.from('strength'), Array.from('string'));
 */
 ```
 
+### Usage
+
+#### with Node.js
+
+```
+npm i wu-diff-js
+```
+
+### with deno
+
+```
+import diff from 'https://denopkg.com/bokuweb/wu-diff-js@0.1.6/lib/index.ts';
+```
+
 ## LICENSE
 
 The MIT License (MIT)
