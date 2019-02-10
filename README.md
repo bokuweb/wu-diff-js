@@ -36,7 +36,7 @@ npm i wu-diff-js
 ### with deno
 
 ```
-import diff from 'https://denopkg.com/bokuweb/wu-diff-js@0.1.6/lib/index.ts';
+import diff from 'https://denopkg.com/bokuweb/wu-diff-js@0.1.7/lib/index.ts';
 ```
 
 ## LICENSE
