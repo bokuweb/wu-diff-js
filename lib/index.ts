@@ -90,7 +90,7 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
   }
 
   const prefixCommon = createCommon(A, B);
-  const suffixCommon = createCommon(A.slice(prefixCommon.length), B.slice(prefixCommon.length), true);
+  const suffixCommon = createCommon(A.slice(prefixCommon.length), B.slice(prefixCommon.length), true).reverse();
   A = suffixCommon.length ? A.slice(prefixCommon.length, -suffixCommon.length) : A.slice(prefixCommon.length);
   B = suffixCommon.length ? B.slice(prefixCommon.length, -suffixCommon.length) : B.slice(prefixCommon.length);
   const swapped = B.length > A.length;
