@@ -6,28 +6,28 @@
   "author": "bokuweb <bokuweb12@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --outDir dist",
+    "build": "tsc -p tsconfig.json --outDir dist",
     "clean": "rimraf ./dist",
     "example": "npm run build && node examples/example.js",
-    "test": "tsc --outDir dist && ava dist/*.test.js",
-    "tsc:watch": "tsc --outDir dist -w",
+    "test": "tsc -p tsconfig.json --outDir dist && ava dist/*.test.js",
+    "tsc:watch": "tsc -p tsconfig.json --outDir dist -w",
     "test:watch": "ava dist/*.test.js --watch",
     "watch": "run-p tsc:watch test:watch",
     "prepublish": "run-s clean build"
   },
   "devDependencies": {
-    "@types/node": "^9.6.0",
+    "@types/node": "^16.7.10",
     "ava": "^0.25.0",
-    "npm-run-all": "^4.1.2",
+    "benchmark": "^2.1.4",
+    "npm-run-all": "^4.1.5",
     "rimraf": "^2.6.2",
-    "typescript": "^2.8.0",
-    "benchmark": "^2.1.4"
+    "typescript": "^4.4.2"
   },
   "typings": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "dependencies": {
-    "tslib": "^1.9.0"
+    "tslib": "^2.3.1"
   }
 }
