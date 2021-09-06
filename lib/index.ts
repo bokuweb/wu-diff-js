@@ -57,7 +57,7 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
   }
 
   function createFP(slide: FarthestPoint, down: FarthestPoint, k: number, M: number, N: number): FarthestPoint {
-    if (slide && slide.y === -1 && (down && down.y === -1)) return { y: 0, id: 0 };
+    if (slide && slide.y === -1 && down && down.y === -1) return { y: 0, id: 0 };
     if ((down && down.y === -1) || k === M || (slide && slide.y) > (down && down.y) + 1) {
       const prev = slide.id;
       ptr++;
@@ -108,11 +108,11 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
   const offset = N;
   const delta = M - N;
   const size = M + N + 1;
-  const fp = new Array(size).fill({ y: -1 });
+  let fp = new Array(size).fill({ y: -1 });
   // INFO: This buffer is used to save memory and improve performance.
   //       The first half is used to save route and last half is used to save diff type.
   //       This is because, when I kept new uint8array area to save type, performance worsened.
-  const routes = new Uint32Array((M * N + size + 1) * 2);
+  let routes = new Uint32Array((M * N + size + 1) * 2);
   const diffTypesPtrOffset = routes.length / 2;
   let ptr = 0;
   let p = -1;
@@ -126,9 +126,17 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
     }
     fp[delta + offset] = snake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], offset, A, B);
   }
-  return [
-    ...prefixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
-    ...backTrace(A, B, fp[delta + offset], swapped),
-    ...suffixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
-  ];
+  const pre = prefixCommon.map(c => ({ type: 'common' as DiffType, value: c }));
+  const traced = backTrace(A, B, fp[delta + offset], swapped);
+  const suf = suffixCommon.map(c => ({ type: 'common' as DiffType, value: c }));
+
+  // cleanup
+  (routes as any) = null;
+  (fp as any) = null;
+
+  if ('flat' in Array.prototype) {
+    return [pre, traced, suf].flat();
+  } else {
+    return [...pre, ...traced, ...suf];
+  }
 }
