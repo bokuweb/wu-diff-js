@@ -35,7 +35,7 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
     let a = M - 1;
     let b = N - 1;
     let j = routes[current.id];
-    let type = routes[current.id + diffTypesPtrOffset];
+    let type = types[current.id];
     while (true) {
       if (!j && !type) break;
       const prev = j;
@@ -51,7 +51,7 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
         b -= 1;
       }
       j = routes[prev];
-      type = routes[prev + diffTypesPtrOffset];
+      type = types[prev];
     }
     return result;
   }
@@ -62,13 +62,13 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
       const prev = slide.id;
       ptr++;
       routes[ptr] = prev;
-      routes[ptr + diffTypesPtrOffset] = ADDED;
+      types[ptr] = ADDED;
       return { y: slide.y, id: ptr };
     } else {
       const prev = down.id;
       ptr++;
       routes[ptr] = prev;
-      routes[ptr + diffTypesPtrOffset] = REMOVED;
+      types[ptr] = REMOVED;
       return { y: down.y + 1, id: ptr };
     }
   }
@@ -84,7 +84,7 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
       fp.id = ptr;
       fp.y += 1;
       routes[ptr] = prev;
-      routes[ptr + diffTypesPtrOffset] = COMMON;
+      types[ptr] = COMMON;
     }
     return fp;
   }
@@ -109,11 +109,8 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
   const delta = M - N;
   const size = M + N + 1;
   let fp = new Array(size).fill({ y: -1 });
-  // INFO: This buffer is used to save memory and improve performance.
-  //       The first half is used to save route and last half is used to save diff type.
-  //       This is because, when I kept new uint8array area to save type, performance worsened.
-  let routes = new Array((M * N + size + 1) * 2);
-  const diffTypesPtrOffset = routes.length / 2;
+  let routes = new Array(M * N + size + 1);
+  let types = new Array(M * N + size + 1);
   let ptr = 0;
   let p = -1;
   while (fp[delta + offset].y < N) {
