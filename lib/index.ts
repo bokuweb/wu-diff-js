@@ -22,11 +22,11 @@ const chunkIndex = (ptr: number): number => {
   return ~~(ptr / CHUNK_SIZE);
 };
 
-function createCommon<T>(A: T[], B: T[], reverse?: boolean) {
+function createCommon<T>(A: T[], B: T[], reverse?: boolean, eq = (a: T, b: T) => a === b) {
   const common = [];
   if (A.length === 0 || B.length === 0) return [];
   for (let i = 0; i < Math.min(A.length, B.length); i += 1) {
-    if (A[reverse ? A.length - i - 1 : i] === B[reverse ? B.length - i - 1 : i]) {
+    if (eq(A[reverse ? A.length - i - 1 : i], B[reverse ? B.length - i - 1 : i])) {
       common.push(A[reverse ? A.length - i - 1 : i]);
     } else {
       return common;
@@ -35,7 +35,7 @@ function createCommon<T>(A: T[], B: T[], reverse?: boolean) {
   return common;
 }
 
-export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
+export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): DiffResult<T>[] {
   function backTrace<T>(A: T[], B: T[], current: FarthestPoint, swapped: boolean) {
     const M = A.length;
     const N = B.length;
@@ -66,7 +66,7 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
     return result;
   }
 
-  function createFP(slide: FarthestPoint, down: FarthestPoint, k: number, M: number, N: number): FarthestPoint {
+  function createFP(slide: FarthestPoint, down: FarthestPoint, k: number, M: number): FarthestPoint {
     if (slide && slide.y === -1 && down && down.y === -1) return { y: 0, id: 0 };
     if ((down && down.y === -1) || k === M || (slide && slide.y) > (down && down.y) + 1) {
       const prev = slide.id;
@@ -85,12 +85,12 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
     }
   }
 
-  function snake<T>(k: number, slide: FarthestPoint, down: FarthestPoint, offset: number, A: T[], B: T[]) {
+  function snake(k: number, slide: FarthestPoint, down: FarthestPoint, A: T[], B: T[]) {
     const M = A.length;
     const N = B.length;
     if (k < -N || M < k) return { y: -1 };
-    const fp = createFP(slide, down, k, M, N);
-    while (fp.y + k < M && fp.y < N && A[fp.y + k] === B[fp.y]) {
+    const fp = createFP(slide, down, k, M);
+    while (fp.y + k < M && fp.y < N && eq(A[fp.y + k], B[fp.y])) {
       const prev = fp.id;
       ptr++;
       fp.id = ptr;
@@ -102,8 +102,8 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
     return fp;
   }
 
-  const prefixCommon = createCommon(A, B);
-  const suffixCommon = createCommon(A.slice(prefixCommon.length), B.slice(prefixCommon.length), true).reverse();
+  const prefixCommon = createCommon(A, B, undefined, eq);
+  const suffixCommon = createCommon(A.slice(prefixCommon.length), B.slice(prefixCommon.length), true, eq).reverse();
   A = suffixCommon.length ? A.slice(prefixCommon.length, -suffixCommon.length) : A.slice(prefixCommon.length);
   B = suffixCommon.length ? B.slice(prefixCommon.length, -suffixCommon.length) : B.slice(prefixCommon.length);
   const swapped = B.length > A.length;
@@ -133,12 +133,12 @@ export default function diff<T>(A: T[], B: T[]): DiffResult<T>[] {
   while (fp[delta + offset].y < N) {
     p = p + 1;
     for (let k = -p; k < delta; ++k) {
-      fp[k + offset] = snake(k, fp[k - 1 + offset], fp[k + 1 + offset], offset, A, B);
+      fp[k + offset] = snake(k, fp[k - 1 + offset], fp[k + 1 + offset], A, B);
     }
     for (let k = delta + p; k > delta; --k) {
-      fp[k + offset] = snake(k, fp[k - 1 + offset], fp[k + 1 + offset], offset, A, B);
+      fp[k + offset] = snake(k, fp[k - 1 + offset], fp[k + 1 + offset], A, B);
     }
-    fp[delta + offset] = snake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], offset, A, B);
+    fp[delta + offset] = snake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], A, B);
   }
   const pre = prefixCommon.map(c => ({ type: 'common' as DiffType, value: c }));
   const traced = backTrace(A, B, fp[delta + offset], swapped);
