@@ -17,6 +17,14 @@ export type DiffResult<T> =
       value: [T, T];
     };
 
+/**
+ * Legacy DiffResult
+ */
+export type FlattenDiffResult<T> = {
+  type: DiffType;
+  value: T;
+};
+
 // HACK: Avoid invalid array length
 // https://stackoverflow.com/questions/37421749/is-there-an-item-limit-for-large-arrays-in-javascript#:~:text=In%20Chrome%20maximum%20array%20size%20is%20something%20between%201e9%20and%201e10.&text=And%20crashing%20is%20not%20related,with%20a%20normal%20loop%20too
 const CHUNK_SIZE = 50000000;
