@@ -28,8 +28,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2
       typescript:
-        specifier: 4.6.3
-        version: 4.6.3
+        specifier: '5.6'
+        version: 5.6.3
 
 packages:
 
@@ -999,9 +999,9 @@ packages:
     resolution: {integrity: sha512-/OxDN6OtAk5KBpGb28T+HZc2M+ADtvRxXrKKbUwtsLgdoxgX13hyy7ek6bFRl5+aBs2yZzB0c4CnQfAtVypW/g==}
     engines: {node: '>= 0.4'}
 
-  typescript@4.6.3:
-    resolution: {integrity: sha512-yNIatDa5iaofVozS/uQJEl3JRWLKKGJKh6Yaiv0GLGSuhpFJe7P3SbHZ8/yjAHRQwKRoA6YZqlfjXWmVzoVSMw==}
-    engines: {node: '>=4.2.0'}
+  typescript@5.6.3:
+    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
+    engines: {node: '>=14.17'}
     hasBin: true
 
   unbox-primitive@1.0.2:
@@ -2099,7 +2099,7 @@ snapshots:
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
 
-  typescript@4.6.3: {}
+  typescript@5.6.3: {}
 
   unbox-primitive@1.0.2:
     dependencies:
