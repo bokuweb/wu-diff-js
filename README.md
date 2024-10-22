@@ -6,22 +6,21 @@ Compute differences between two slices using wu(the O(NP)) algorithm.
 
 ## Example
 
-``` javascript
+```javascript
 import diff from 'wu-diff-js';
 
 diff(Array.from('strength'), Array.from('string'));
 /*
   [
-    { type: 'common', value: 's' },
-    { type: 'common', value: 't' },
-    { type: 'common', value: 'r' },
+    { type: 'common', value: ['s', 's'] },
+    { type: 'common', value: ['t', 't'] },
+    { type: 'common', value: ['r', 'r'] },
     { type: 'removed', value: 'e' },
     { type: 'added', value: 'i' },
-    { type: 'common', value: 'n' },
-    { type: 'common', value: 'g' },
+    { type: 'common', value: ['n', 'n'] },
+    { type: 'common', value: ['g', 'g'] },
     { type: 'removed', value: 't' },
     { type: 'removed', value: 'h' },
-  ]
 */
 ```
 
@@ -62,4 +61,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
