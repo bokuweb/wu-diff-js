@@ -3,12 +3,19 @@ interface FarthestPoint {
   id: number;
 }
 
-export type DiffType = 'removed' | 'common' | 'added';
+export type DiffType = 'common' | DiffChangedType;
 
-export interface DiffResult<T> {
-  type: DiffType;
-  value: T;
-}
+export type DiffChangedType = 'removed' | 'added';
+
+export type DiffResult<T> =
+  | {
+      type: DiffChangedType;
+      value: T;
+    }
+  | {
+      type: 'common';
+      value: [T, T];
+    };
 
 // HACK: Avoid invalid array length
 // https://stackoverflow.com/questions/37421749/is-there-an-item-limit-for-large-arrays-in-javascript#:~:text=In%20Chrome%20maximum%20array%20size%20is%20something%20between%201e9%20and%201e10.&text=And%20crashing%20is%20not%20related,with%20a%20normal%20loop%20too
@@ -22,12 +29,14 @@ const chunkIndex = (ptr: number): number => {
   return ~~(ptr / CHUNK_SIZE);
 };
 
-function createCommon<T>(A: T[], B: T[], reverse?: boolean, eq = (a: T, b: T) => a === b) {
-  const common = [];
+function createCommon<T>(A: T[], B: T[], reverse?: boolean, eq = (a: T, b: T) => a === b): [T, T][] {
+  const common: [T, T][] = [];
   if (A.length === 0 || B.length === 0) return [];
   for (let i = 0; i < Math.min(A.length, B.length); i += 1) {
-    if (eq(A[reverse ? A.length - i - 1 : i], B[reverse ? B.length - i - 1 : i])) {
-      common.push(A[reverse ? A.length - i - 1 : i]);
+    const a = A[reverse ? A.length - i - 1 : i];
+    const b = B[reverse ? B.length - i - 1 : i];
+    if (eq(a, b)) {
+      common.push([a, b]);
     } else {
       return common;
     }
@@ -36,7 +45,7 @@ function createCommon<T>(A: T[], B: T[], reverse?: boolean, eq = (a: T, b: T) =>
 }
 
 export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): DiffResult<T>[] {
-  function backTrace<T>(A: T[], B: T[], current: FarthestPoint, swapped: boolean) {
+  function backTrace<T>(A: T[], B: T[], current: FarthestPoint, swapped: boolean): DiffResult<T>[] {
     const M = A.length;
     const N = B.length;
     const result = [];
@@ -49,13 +58,13 @@ export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): D
       if (!j && !type) break;
       const prev = j;
       if (type === REMOVED) {
-        result.unshift({ type: (swapped ? 'removed' : 'added') as DiffType, value: B[b] });
+        result.unshift({ type: (swapped ? 'removed' : 'added') as DiffChangedType, value: B[b] });
         b -= 1;
       } else if (type === ADDED) {
-        result.unshift({ type: (swapped ? 'added' : 'removed') as DiffType, value: A[a] });
+        result.unshift({ type: (swapped ? 'added' : 'removed') as DiffChangedType, value: A[a] });
         a -= 1;
       } else {
-        result.unshift({ type: 'common' as DiffType, value: A[a] });
+        result.unshift({ type: 'common' as const, value: [A[a], B[b]] as [T, T] });
         a -= 1;
         b -= 1;
       }
@@ -113,9 +122,9 @@ export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): D
   if (!M && !N && !suffixCommon.length && !prefixCommon.length) return [];
   if (!N) {
     return [
-      ...prefixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
-      ...A.map(a => ({ type: (swapped ? 'added' : 'removed') as DiffType, value: a })),
-      ...suffixCommon.map(c => ({ type: 'common' as DiffType, value: c })),
+      ...prefixCommon.map(([a, b]) => ({ type: 'common' as const, value: [a, b] as [T, T] })),
+      ...A.map(a => ({ type: (swapped ? 'added' : 'removed') as DiffChangedType, value: a })),
+      ...suffixCommon.map(([a, b]) => ({ type: 'common' as const, value: [a, b] as [T, T] })),
     ];
   }
   const offset = N;
@@ -140,9 +149,9 @@ export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): D
     }
     fp[delta + offset] = snake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], A, B);
   }
-  const pre = prefixCommon.map(c => ({ type: 'common' as DiffType, value: c }));
+  const pre = prefixCommon.map(([a, b]) => ({ type: 'common' as const, value: [a, b] as [T, T] }));
   const traced = backTrace(A, B, fp[delta + offset], swapped);
-  const suf = suffixCommon.map(c => ({ type: 'common' as DiffType, value: c }));
+  const suf = suffixCommon.map(([a, b]) => ({ type: 'common' as const, value: [a, b] as [T, T] }));
 
   // cleanup
   (routes as any) = null;
