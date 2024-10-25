@@ -157,10 +157,8 @@ export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): D
     }
     fp[delta + offset] = snake(delta, fp[delta - 1 + offset], fp[delta + 1 + offset], A, B);
   }
-  console.log({ prefixCommon });
   const pre = prefixCommon.map(([a, b]) => ({ type: 'common' as const, value: [a, b] as [T, T] }));
   const traced = backTrace(A, B, fp[delta + offset], swapped);
-  console.log({ suffixCommon });
   const suf = suffixCommon.map(([a, b]) => ({ type: 'common' as const, value: [a, b] as [T, T] }));
 
   // cleanup
