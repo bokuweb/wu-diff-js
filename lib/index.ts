@@ -72,7 +72,7 @@ export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): D
         result.unshift({ type: (swapped ? 'added' : 'removed') as DiffChangedType, value: A[a] });
         a -= 1;
       } else {
-        result.unshift({ type: 'common' as const, value: [A[a], B[b]] as [T, T] });
+        result.unshift({ type: 'common' as const, value: (swapped ? [B[b], A[a]] : [A[a], B[b]]) as [T, T] });
         a -= 1;
         b -= 1;
       }
