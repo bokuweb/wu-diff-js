@@ -52,7 +52,7 @@ function createCommon<T>(A: T[], B: T[], reverse?: boolean, eq = (a: T, b: T) =>
   return common;
 }
 
-export default function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): DiffResult<T>[] {
+export function diff<T>(A: T[], B: T[], eq = (a: T, b: T) => a === b): DiffResult<T>[] {
   function backTrace<T>(A: T[], B: T[], current: FarthestPoint, swapped: boolean): DiffResult<T>[] {
     const M = A.length;
     const N = B.length;
