@@ -1,5 +1,5 @@
 import test from 'ava';
-import diff from './';
+import { diff } from './';
 
 test('empty', t => {
   t.deepEqual(diff([], []), []);
