@@ -7,7 +7,7 @@ Compute differences between two slices using wu(the O(NP)) algorithm.
 ## Example
 
 ```javascript
-import diff from 'wu-diff-js';
+import { diff } from 'wu-diff-js';
 
 diff(Array.from('strength'), Array.from('string'));
 /*
