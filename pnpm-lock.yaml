@@ -16,8 +16,8 @@ importers:
         specifier: ^16.7.10
         version: 16.18.114
       ava:
-        specifier: 4.1.0
-        version: 4.1.0
+        specifier: 4.3.3
+        version: 4.3.3
       benchmark:
         specifier: ^2.1.4
         version: 2.1.4
@@ -116,9 +116,9 @@ packages:
     resolution: {integrity: sha512-tLkvA81vQG/XqE2mjDkGQHoOINtMHtysSnemrmoGe6PydDPMRbVugqyk4A6V/WDWEfm3l+0d8anA9r8cv/5Jaw==}
     engines: {node: '>=12'}
 
-  ava@4.1.0:
-    resolution: {integrity: sha512-QD6MBWHzagAwb9vxduXzVWx6Q77DUHLxvIebSY6+enL+Ri6KzSZYj0IBOFifA26wfpJPZnWKLUh3vwx1LyVh/g==}
-    engines: {node: '>=12.22 <13 || >=14.17 <15 || >=16.4 <17 || >=17'}
+  ava@4.3.3:
+    resolution: {integrity: sha512-9Egq/d9R74ExrWohHeqUlexjDbgZJX5jA1Wq4KCTqc3wIfpGEK79zVy4rBtofJ9YKIxs4PzhJ8BgbW5PlAYe6w==}
+    engines: {node: '>=12.22 <13 || >=14.17 <15 || >=16.4 <17 || >=18'}
     hasBin: true
     peerDependencies:
       '@ava/typescript': '*'
@@ -287,8 +287,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  emittery@0.10.2:
-    resolution: {integrity: sha512-aITqOwnLanpHLNXZJENbOgjUBeHocD+xsSJmNrjovKBW5HbSpW3d1pEls7GFQPUWXiwG9+0P4GtHfEqC/4M0Iw==}
+  emittery@0.11.0:
+    resolution: {integrity: sha512-S/7tzL6v5i+4iJd627Nhv9cLFIo5weAIlGccqJFpnBoDB8U1TF2k5tez4J/QNuxyyhWuFqHg1L84Kd3m7iXg6g==}
     engines: {node: '>=12'}
 
   emoji-regex@8.0.0:
@@ -410,7 +410,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globalthis@1.0.4:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
@@ -1131,7 +1131,7 @@ snapshots:
 
   arrify@3.0.0: {}
 
-  ava@4.1.0:
+  ava@4.3.3:
     dependencies:
       acorn: 8.13.0
       acorn-walk: 8.3.4
@@ -1153,7 +1153,7 @@ snapshots:
       currently-unhandled: 0.4.1
       debug: 4.3.7
       del: 6.1.1
-      emittery: 0.10.2
+      emittery: 0.11.0
       figures: 4.0.1
       globby: 13.2.2
       ignore-by-default: 2.1.0
@@ -1364,7 +1364,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  emittery@0.10.2: {}
+  emittery@0.11.0: {}
 
   emoji-regex@8.0.0: {}
 
